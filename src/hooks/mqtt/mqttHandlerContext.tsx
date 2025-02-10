@@ -58,7 +58,7 @@ export const MqttHandlerProvider = ({ children }: { children: ReactNode }) => {
       // Subscribe to topics or perform actions when connected
       mqttClient.onMessageArrived = (message: any) => {
         console.log('Message arrived:', message.destinationName)
-        if (message.destinationName.includes('/arduino-r4-1/status/')) {
+        if (message.destinationName.includes('/arduino/status')) {
           if (message.payloadString === 'ONLINE') {
             console.log('PASSPRO IS ONLINE ')
             setConnectedDevice(true)
@@ -71,7 +71,7 @@ export const MqttHandlerProvider = ({ children }: { children: ReactNode }) => {
       }
 
       if (mqttIsConnected) {
-        mqttClient.subscribe('/arduino-r4-1/status/')
+        mqttClient.subscribe('/arduino/status')
         console.log('subscribed')
       }
     }

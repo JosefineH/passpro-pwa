@@ -1,4 +1,4 @@
-import { createContext, useState, ReactNode, useContext, useEffect } from 'react'
+import { createContext, useState, ReactNode, useContext } from 'react'
 
 interface ConnectedDeviceContextProps {
   setIsDeviceConnected: any

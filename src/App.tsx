@@ -1,15 +1,33 @@
-import './App.css'
-import Home from '../src/pages/home/home'
+import { Route, Routes, BrowserRouter as Router } from 'react-router-dom'
+import Home from './pages/home/Home'
+import GameOverview from './pages/games/Games'
 import { MqttHandlerProvider } from './hooks/mqtt/mqttHandlerContext'
 import { ConnectedDeviceProvider } from './contexts/connectedDeviceContext'
+import { ROUTES } from './utils/api'
+import Navbar from './components/Navbar'
+import { Box } from '@mui/material'
 
-function App() {
+const AppContent = () => {
   return (
     <ConnectedDeviceProvider>
       <MqttHandlerProvider>
-        <Home />
+        <Box sx={{ display: 'display', textAlign: 'center' }}>
+          <Navbar />
+          <Routes>
+            <Route path={ROUTES.HOME} element={<Home />} />
+            <Route path={ROUTES.GAMES} element={<GameOverview />} />
+          </Routes>
+        </Box>
       </MqttHandlerProvider>
     </ConnectedDeviceProvider>
+  )
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   )
 }
 
