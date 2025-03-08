@@ -8,9 +8,19 @@ const GameOverview = () => {
   const isMobile = useIsMobile()
 
   return (
-    <Container maxWidth="xl" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+    <Container
+      maxWidth={false}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        backgroundColor: '#f5f6fa',
+        padding: '2rem',
+      }}
+    >
       <Box>
-        <Typography variant="h4" sx={{ padding: '3rem' }}>
+        <Typography variant="h1" sx={{ padding: '3rem' }}>
           Välj spel
         </Typography>
         <Box sx={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr 1fr', gap: isMobile ? '1rem' : '3rem' }}>

@@ -54,15 +54,46 @@ const Home = () => {
   useEffect(() => {}, [isDeviceConnected])
 
   return (
-    <Container maxWidth="xl" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-      <Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', mb: '3rem' }}>
-          <Typography variant="h4" sx={{ padding: '3rem 0 2rem 0' }}>
+    <Container
+      maxWidth={false}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        backgroundColor: '#f5f6fa',
+        // padding: '2rem',
+      }}
+    >
+      <Box sx={{ width: '100%', maxWidth: '1200px', textAlign: 'center' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'column',
+            marginBottom: '3rem',
+          }}
+        >
+          <Typography
+            variant="h1"
+            sx={{
+              fontSize: '2.5rem',
+              fontWeight: 700,
+              marginBottom: '1rem',
+              color: '#2c3e50',
+            }}
+          >
             Välj mode
           </Typography>
           <DeviceStatus isDeviceConnected={isDeviceConnected} />
         </Box>
-        <Box sx={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '1rem' : '3rem' }}>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
+            gap: '2rem',
+          }}
+        >
           {overviewItems.map((item: ICardItem, key: number) => (
             <CustomCard key={key} title={item.title} route={item.route} description={item.description} icon={item.icon} />
           ))}

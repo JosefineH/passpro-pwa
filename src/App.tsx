@@ -5,7 +5,9 @@ import { MqttHandlerProvider } from './hooks/mqtt/mqttHandlerContext'
 import { ConnectedDeviceProvider } from './contexts/connectedDeviceContext'
 import { ROUTES } from './utils/api'
 import Navbar from './components/Navbar'
-import { Box } from '@mui/material'
+import { Box, ThemeProvider } from '@mui/material'
+import GamesDetailsPage from './pages/games/GamesDetailsPage'
+import { theme } from './utils/theme'
 
 const AppContent = () => {
   return (
@@ -16,6 +18,7 @@ const AppContent = () => {
           <Routes>
             <Route path={ROUTES.HOME} element={<Home />} />
             <Route path={ROUTES.GAMES} element={<GameOverview />} />
+            <Route path={ROUTES.GAMES_DETAIL_PAGE} element={<GamesDetailsPage />} />
           </Routes>
         </Box>
       </MqttHandlerProvider>
@@ -25,9 +28,11 @@ const AppContent = () => {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <AppContent />
+      </Router>
+    </ThemeProvider>
   )
 }
 

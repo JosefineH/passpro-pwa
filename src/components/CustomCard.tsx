@@ -1,30 +1,55 @@
 import { useNavigate } from 'react-router-dom'
 import { useIsMobile } from '../hooks/useIsMobile'
-import { Card, CardContent, Typography } from '@mui/material'
+import { Box, Card, CardContent, Typography } from '@mui/material'
 import { ICardItem } from '../utils/types'
 
 export const CustomCard = ({ title, route, description, icon }: ICardItem) => {
   const isMobile = useIsMobile()
   const navigate = useNavigate()
+
   return (
     <Card
       sx={{
-        minWidth: 275,
-        minHeight: isMobile ? 100 : 175,
+        minWidth: isMobile ? '100%' : '275px',
+        minHeight: isMobile ? '120px' : '200px',
         cursor: 'pointer',
-        alignContent: 'center',
+        borderRadius: '16px',
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
         '&:hover': {
-          backgroundColor: '#a5d19796',
+          transform: 'scale(1.05)',
+          boxShadow: '0 8px 20px rgba(0, 0, 0, 0.15)',
+          backgroundColor: '#e8f5e9',
         },
+        backgroundColor: '#ffffff',
       }}
       onClick={() => navigate(route)}
     >
-      <CardContent>
-        {icon}
-        <Typography variant="h5" gutterBottom>
-          {title}blue
+      <CardContent
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          padding: '1.5rem',
+        }}
+      >
+        <Box
+          sx={{
+            fontSize: '2rem',
+            color: '#4caf50',
+            marginBottom: '1rem',
+          }}
+        >
+          {icon}
+        </Box>
+        <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: '0.5rem', color: '#2c3e50' }}>
+          {title}
         </Typography>
-        <Typography variant="body1">{description}</Typography>
+        <Typography variant="body2" sx={{ color: '#7f8c8d' }}>
+          {description}
+        </Typography>
       </CardContent>
     </Card>
   )

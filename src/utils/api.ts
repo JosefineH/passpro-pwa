@@ -1,14 +1,20 @@
+export const CONNECTED_DEVICE_ID = '/arduino'
+
 export const MQTT = {
-  CONNECTED_DEVICE_ID: '/arduino',
   TOPICS: {
-    STATUS: '/status',
-    CHOOSE_GAME: '/choose_game',
+    STATUS: CONNECTED_DEVICE_ID + '/status',
+    SELECT_GAME: CONNECTED_DEVICE_ID + '/selectGame',
+    TOTAL_GAME_SCORE: CONNECTED_DEVICE_ID + '/totalScore',
+    STARTED_GAME: CONNECTED_DEVICE_ID + '/startedGame',
+    STOPPED_GAME: CONNECTED_DEVICE_ID + '/stoppedGame',
+    CURRENT_POINT: CONNECTED_DEVICE_ID + '/currentPoint',
   },
 }
 
 export const ROUTES = {
   HOME: '/',
   GAMES: '/games',
+  GAMES_DETAIL_PAGE: '/games/:id',
   STATISTICS: '/statistics',
   MYPASSPRO: '/mypasspro',
   SETTINGS: '/settings',
