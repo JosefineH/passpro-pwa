@@ -14,18 +14,25 @@ const GameOverview = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        height: '100vh',
-        backgroundColor: '#f5f6fa',
+        height: '100%',
+        backgroundColor: '#e0eadf',
         padding: '2rem',
       }}
     >
-      <Box>
-        <Typography variant="h1" sx={{ padding: '3rem' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
+          marginBottom: '3rem',
+        }}
+      >
+        {/* <Typography variant="h1" sx={{ paddingBottom: '2rem' }}>
           Välj spel
-        </Typography>
+        </Typography> */}
         <Box sx={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr 1fr', gap: isMobile ? '1rem' : '3rem' }}>
           {gameOverviewItems.map((item: ICardItem, key: number) => (
-            <CustomCard key={key} title={item.title} route={item.route} description={item.description} icon={item.icon} />
+            <CustomCard key={key} title={item.title} route={item.route} shortDescription={item.shortDescription} description={item.description} icon={item.icon} />
           ))}
         </Box>
       </Box>

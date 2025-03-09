@@ -5,15 +5,20 @@ interface ConnectedDeviceContextProps {
   isDeviceConnected: boolean
   totalGameScore: number
   setTotalGameScore: any
-  startedGame: number | any
-  setStartedGame: any
-  stoppedGame: StoppedGameProps
+  selectedGame: SelectedGameProps | null
+  setSelectedGame: any
+  stoppedGame: StoppedGameProps | null
   setStoppedGame: any
 }
 
 interface StoppedGameProps {
-  id: number | null
+  id: string | null
   points: number | null
+}
+
+interface SelectedGameProps {
+  id: string
+  isStarted: boolean
 }
 
 export const ConnectedDeviceContext = createContext<ConnectedDeviceContextProps | undefined>(undefined)
@@ -21,11 +26,10 @@ export const ConnectedDeviceContext = createContext<ConnectedDeviceContextProps 
 export const ConnectedDeviceProvider = ({ children }: { children: ReactNode }) => {
   const [isDeviceConnected, setIsDeviceConnected] = useState<boolean>(false)
   const [totalGameScore, setTotalGameScore] = useState<number>(0)
-  const [startedGame, setStartedGame] = useState<number | null>(null)
-  const [stoppedGame, setStoppedGame] = useState<StoppedGameProps>({ id: 1, points: 1 })
+  const [selectedGame, setSelectedGame] = useState<SelectedGameProps | null>(null)
+  const [stoppedGame, setStoppedGame] = useState<StoppedGameProps | null>(null)
 
-  console.log('stopped 3 ', stoppedGame)
-
+  console.log('CONECTED DEVICE SELECTED GAME ', selectedGame)
   return (
     <ConnectedDeviceContext.Provider
       value={{
@@ -33,8 +37,8 @@ export const ConnectedDeviceProvider = ({ children }: { children: ReactNode }) =
         setIsDeviceConnected: setIsDeviceConnected,
         totalGameScore: totalGameScore,
         setTotalGameScore: setTotalGameScore,
-        startedGame: startedGame,
-        setStartedGame: setStartedGame,
+        selectedGame: selectedGame,
+        setSelectedGame: setSelectedGame,
         stoppedGame: stoppedGame,
         setStoppedGame: setStoppedGame,
       }}
@@ -78,20 +82,20 @@ export const useTotalGameScore = () => {
   return context.totalGameScore
 }
 
-export const useStartedGame = () => {
+export const useSelectedGame = () => {
   const context = useContext(ConnectedDeviceContext)
   if (!context) {
     throw new Error('hook not used correct in context')
   }
-  return context.startedGame
+  return context.selectedGame
 }
 
-export const useSetStartedGame = () => {
+export const useSetSelectedGame = () => {
   const context = useContext(ConnectedDeviceContext)
   if (!context) {
     throw new Error('hook not used correct in context')
   }
-  return context.setStartedGame
+  return context.setSelectedGame
 }
 
 export const useStoppedGame = () => {

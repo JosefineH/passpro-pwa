@@ -3,14 +3,19 @@ import { useIsMobile } from '../hooks/useIsMobile'
 import { Box, Card, CardContent, Typography } from '@mui/material'
 import { ICardItem } from '../utils/types'
 
-export const CustomCard = ({ title, route, description, icon }: ICardItem) => {
+export const CustomCard = ({ title, route, description, icon, shortDescription }: ICardItem) => {
   const isMobile = useIsMobile()
   const navigate = useNavigate()
+
+  const handleClick = () => {
+    navigate(route)
+  }
 
   return (
     <Card
       sx={{
         minWidth: isMobile ? '100%' : '275px',
+        // maxWidth: isMobile ? '100%' : '200px',
         minHeight: isMobile ? '120px' : '200px',
         cursor: 'pointer',
         borderRadius: '16px',
@@ -23,7 +28,7 @@ export const CustomCard = ({ title, route, description, icon }: ICardItem) => {
         },
         backgroundColor: '#ffffff',
       }}
-      onClick={() => navigate(route)}
+      onClick={() => handleClick()}
     >
       <CardContent
         sx={{
@@ -39,7 +44,7 @@ export const CustomCard = ({ title, route, description, icon }: ICardItem) => {
           sx={{
             fontSize: '2rem',
             color: '#4caf50',
-            marginBottom: '1rem',
+            // marginBottom: '1rem',
           }}
         >
           {icon}
@@ -48,7 +53,7 @@ export const CustomCard = ({ title, route, description, icon }: ICardItem) => {
           {title}
         </Typography>
         <Typography variant="body2" sx={{ color: '#7f8c8d' }}>
-          {description}
+          {shortDescription ? shortDescription : description}
         </Typography>
       </CardContent>
     </Card>

@@ -3,6 +3,7 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../utils/api'
+import PeopleIcon from '@mui/icons-material/People'
 
 const Navbar = () => {
   const navigate = useNavigate()
@@ -13,7 +14,7 @@ const Navbar = () => {
       <AppBar
         position="static"
         sx={{
-          backgroundColor: '#ffffff',
+          backgroundColor: '#e0eadf',
           boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
           borderRadius: '0 0 16px 16px',
           padding: '0 1rem',
@@ -21,12 +22,12 @@ const Navbar = () => {
       >
         <Toolbar
           sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
+            display: 'grid',
+            gridTemplateColumns: '1fr 6fr 1fr',
             alignItems: 'center',
           }}
         >
-          {!isHomeScreen && (
+          {!isHomeScreen ? (
             <IconButton
               size="large"
               edge="start"
@@ -34,7 +35,7 @@ const Navbar = () => {
               onClick={() => navigate(-1)}
               sx={{
                 color: '#2c3e50',
-                backgroundColor: '#f5f6fa',
+                // backgroundColor: '#f5f6fa',
                 '&:hover': {
                   backgroundColor: '#e8eaf6',
                 },
@@ -42,6 +43,8 @@ const Navbar = () => {
             >
               <ArrowBackIosIcon />
             </IconButton>
+          ) : (
+            <Box sx={{ padding: '1rem' }}></Box>
           )}
 
           <Typography
@@ -64,13 +67,14 @@ const Navbar = () => {
             onClick={() => navigate(ROUTES.SETTINGS)}
             sx={{
               color: '#2c3e50',
-              backgroundColor: '#f5f6fa',
+              //   backgroundColor: '#f5f6fa',
               '&:hover': {
-                backgroundColor: '#e8eaf6',
+                // backgroundColor: '#e8eaf6',
               },
             }}
           >
-            <SettingsOutlinedIcon />
+            <PeopleIcon sx={{ paddingRight: '0.5rem' }} />
+            <Typography> Hammarby IF p13</Typography>
           </IconButton>
         </Toolbar>
       </AppBar>

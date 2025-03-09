@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
 import { Client } from 'paho-mqtt'
-import { useSetTotalGameScore, useSetConnectedDevice, useSetStartedGame, useSetStoppedGame } from '../../contexts/connectedDeviceContext'
+import { useSetTotalGameScore, useSetConnectedDevice, useSetSelectedGame, useSetStoppedGame } from '../../contexts/connectedDeviceContext'
 import { MQTT } from '../../utils/api'
 
 interface MqttHandlerContextProps {
@@ -23,7 +23,7 @@ export const MqttHandlerProvider = ({ children }: { children: ReactNode }) => {
   const [mqttIsConnected, setMqttIsConnected] = useState<boolean>(false)
   const setConnectedDevice = useSetConnectedDevice()
   const setTotalGameScore = useSetTotalGameScore()
-  const setStartedGame = useSetStartedGame()
+  const setSelectedGame = useSetSelectedGame()
   const setStoppedGame = useSetStoppedGame()
 
   const options = {
@@ -94,13 +94,14 @@ export const MqttHandlerProvider = ({ children }: { children: ReactNode }) => {
           // Game started from passpro
           if (message.destinationName.includes(MQTT.TOPICS.STARTED_GAME)) {
             console.log('Started Game ', message.payloadString)
-            setStartedGame(message.payloadString)
+            setSelectedGame({ id: message.payloadString, isStarted: true })
           }
           // Game stopped from passpro. Includes game-id and total points
           if (message.destinationName.includes(MQTT.TOPICS.STOPPED_GAME)) {
             const payload = JSON.parse(message.payloadString)
             console.log('Stopped Game ', payload)
             setStoppedGame(payload)
+            setSelectedGame({ id: payload.id, isStarted: false })
           }
         }
       }

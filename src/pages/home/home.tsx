@@ -40,8 +40,8 @@ const DeviceStatus = ({ isDeviceConnected }: { isDeviceConnected: boolean }) => 
           },
         }}
       />
-      <Typography variant="body2" ml={1}>
-        {isDeviceConnected ? 'Passpro är aktiv' : 'Passpro är inaktiv'}
+      <Typography variant="body1" ml={1}>
+        {isDeviceConnected ? 'Din Passpro är aktiv' : 'Din Passpro är inaktiv'}
       </Typography>
     </Box>
   )
@@ -58,11 +58,11 @@ const Home = () => {
       maxWidth={false}
       sx={{
         display: 'flex',
-        alignItems: 'center',
+        // alignItems: 'center',
         justifyContent: 'center',
         height: '100vh',
-        backgroundColor: '#f5f6fa',
-        // padding: '2rem',
+        backgroundColor: '#e0eadf',
+        padding: '2rem',
       }}
     >
       <Box sx={{ width: '100%', maxWidth: '1200px', textAlign: 'center' }}>
@@ -74,17 +74,9 @@ const Home = () => {
             marginBottom: '3rem',
           }}
         >
-          <Typography
-            variant="h1"
-            sx={{
-              fontSize: '2.5rem',
-              fontWeight: 700,
-              marginBottom: '1rem',
-              color: '#2c3e50',
-            }}
-          >
+          {/* <Typography variant="h1" sx={{ paddingBottom: '2rem' }}>
             Välj mode
-          </Typography>
+          </Typography> */}
           <DeviceStatus isDeviceConnected={isDeviceConnected} />
         </Box>
         <Box
