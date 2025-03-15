@@ -1,13 +1,23 @@
-import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material'
+import { AppBar, Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select, Toolbar, Typography } from '@mui/material'
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ROUTES } from '../utils/api'
 import PeopleIcon from '@mui/icons-material/People'
+import Logo from '../assets/logo_test.png'
+import { useState } from 'react'
 
 const Navbar = () => {
   const navigate = useNavigate()
   const isHomeScreen = window.location.pathname === ROUTES.HOME
+
+  const [selectedTeam, setSelectedTeam] = useState('Hammarby IF P13')
+
+  const handleTeamChange = (event: any) => {
+    setSelectedTeam(event.target.value as string)
+  }
+
+  console.log('selected team ', selectedTeam)
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -46,36 +56,34 @@ const Navbar = () => {
           ) : (
             <Box sx={{ padding: '1rem' }}></Box>
           )}
+          <Link to={ROUTES.HOME}>
+            <img src={Logo} alt="Passpro logo" width="220px" />
+          </Link>
 
-          <Typography
-            variant="h5"
-            component="div"
-            sx={{
-              flexGrow: 1,
-              textAlign: 'center',
-              fontWeight: 700,
-              color: '#2c3e50',
-            }}
-          >
-            Passpro
-          </Typography>
-
-          <IconButton
-            size="large"
-            edge="end"
-            aria-label="settings"
-            onClick={() => navigate(ROUTES.SETTINGS)}
-            sx={{
-              color: '#2c3e50',
-              //   backgroundColor: '#f5f6fa',
-              '&:hover': {
-                // backgroundColor: '#e8eaf6',
-              },
-            }}
-          >
-            <PeopleIcon sx={{ paddingRight: '0.5rem' }} />
-            <Typography> Hammarby IF p13</Typography>
-          </IconButton>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <PeopleIcon sx={{ paddingRight: '0.5rem', color: '#2c3e50' }} />
+            <FormControl>
+              <Select
+                sx={{
+                  boxShadow: 'none',
+                  '.MuiOutlinedInput-notchedOutline': { border: 0 },
+                  '&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+                    border: 0,
+                  },
+                  '&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    border: 0,
+                  },
+                }}
+                labelId="team-select-label"
+                value={selectedTeam}
+                onChange={handleTeamChange}
+              >
+                <MenuItem value="Hammarby IF P13">Hammarby IF P13</MenuItem>
+                <MenuItem value="Hammarby IF Herrar">Hammarby IF Herrar</MenuItem>
+                <MenuItem value="Hammarby IF Damer">Hammarby IF Damer</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
         </Toolbar>
       </AppBar>
     </Box>

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { gameOverviewItems, PlayerProps, players } from '../../utils/data'
-import { Box, Button, List, ListItem, Modal, Typography } from '@mui/material'
+import { Box, Button, Modal, Typography } from '@mui/material'
 import { usePublishMessage } from '../../hooks/mqtt/mqttHandlerContext'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import EditIcon from '@mui/icons-material/Edit'
 
 import { MQTT } from '../../utils/api'
-import { useSelectedGame, useSetSelectedGame, useStoppedGame, useTotalGameScore } from '../../contexts/connectedDeviceContext'
-import { Delete } from '@mui/icons-material'
+import { useSelectedGame, useStoppedGame } from '../../contexts/connectedDeviceContext'
+import { Delete, PersonAdd } from '@mui/icons-material'
 
 import { format } from 'date-fns'
 
@@ -22,21 +22,14 @@ const GameDetailsPage = () => {
 
   const publishMessage = usePublishMessage()
   const [counter, setCounter] = useState(game.timer)
-
-  console.log('counter ', counter)
-
   const selectedGame = useSelectedGame()
-  const setSelectedGame = useSetSelectedGame()
   const isGameStarted = selectedGame && selectedGame.isStarted && selectedGame.id === id
-  console.log('selectedGame ', selectedGame)
 
   const stoppedGame = useStoppedGame()
   const stoppedGameId = stoppedGame?.id ?? null
   const stoppedGamePoints = stoppedGame?.points ?? null
+  console.log('STOPPED GAME ', stoppedGame)
   const hasStoppedGame = selectedGame && stoppedGameId === id
-  //   const isGameStopped = !selectedGame.isStarted && se
-  //   const totalGameScore = useTotalGameScore()
-
   const handleRestartClick = () => {
     publishMessage({ topic: MQTT.TOPICS.SELECT_GAME, message: game.id.toString() })
   }
@@ -65,8 +58,7 @@ const GameDetailsPage = () => {
       sx={{
         display: 'flex',
         justifyContent: 'center',
-        // alignItems: 'center',
-        backgroundColor: '#f5f6fa',
+        backgroundColor: '#e0eadf',
         height: '100vh',
       }}
     >
@@ -110,7 +102,7 @@ const GameDetailsPage = () => {
             paddingX: { xs: '1rem', sm: '2rem', md: '3rem' },
           }}
         >
-          <ResultsTable isGameStarted={isGameStarted} hasStoppedGame={hasStoppedGame} stoppedGamePoints={stoppedGamePoints} />
+          <ResultsTable isGameStarted={isGameStarted} hasStoppedGame={hasStoppedGame} stoppedGamePoints={stoppedGamePoints} gameId={game.id} />
         </Box>
       </Box>
     </Box>
@@ -121,6 +113,7 @@ interface RestultTableProps {
   isGameStarted: boolean | null
   hasStoppedGame: boolean | null
   stoppedGamePoints: number | null
+  gameId: number
 }
 
 type Row = {
@@ -128,22 +121,23 @@ type Row = {
   name: string
   score: number | string
   foot: string
+  date: Date
 }
 
-const ResultsTable = ({ isGameStarted, hasStoppedGame, stoppedGamePoints }: RestultTableProps) => {
-  // const [alert, setAlert] = useState(initialAlert)
-  const [rows, setRows] = useState<Row[]>([])
+const ResultsTable = ({ isGameStarted, hasStoppedGame, stoppedGamePoints, gameId }: RestultTableProps) => {
+  console.log('hasStoppedGame ', hasStoppedGame)
+  const initialState = sessionStorage.getItem(gameId.toString())
+  const [rows, setRows] = useState<Row[]>(initialState ? JSON.parse(initialState) : [])
   const [rowCounter, setRowCounter] = useState(1)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedPlayer, setSelectedPlayer] = useState<Row | null>(null)
+  const [selectedRow, setSelectedRow] = useState<number | null>(null)
 
   const handleDeleteClick = (id: number) => {
-    // Update the rows state to remove the row with the specified ID
     setRows((prevRows) => prevRows.filter((row) => row.id !== id))
   }
 
   const handleAddRow = (points: number | string) => {
-    const newRow = {
+    const newRow: Row = {
       id: rowCounter,
       name: `Spelare ${rowCounter}`,
       score: points,
@@ -155,26 +149,44 @@ const ResultsTable = ({ isGameStarted, hasStoppedGame, stoppedGamePoints }: Rest
   }
 
   useEffect(() => {
-    if (!isGameStarted && hasStoppedGame && stoppedGamePoints) {
+    if (hasStoppedGame && stoppedGamePoints) {
+      console.log('stoppedGamePoints ', stoppedGamePoints)
       handleAddRow(stoppedGamePoints)
     }
-  }, [isGameStarted, stoppedGamePoints])
+  }, [hasStoppedGame, stoppedGamePoints])
 
-  const handleEditClick = (player: Row) => {
-    setSelectedPlayer(player) // Set the selected player
-    setIsModalOpen(true) // Open the modal
+  const handleEditClick = (row: Row) => {
+    setSelectedRow(row.id)
+    setIsModalOpen(true)
   }
 
   const handleCloseModal = () => {
-    setIsModalOpen(false) // Close the modal
+    setIsModalOpen(false)
   }
 
   const handleSelectPlayer = (player: PlayerProps) => {
-    console.log('handleSELECT ', player)
-    setRows((prevRows) => prevRows.map((row) => (row.id === player.id ? { ...row, name: player.name } : row)))
-
-    setIsModalOpen(false) // Close the modal after selecting
+    setRows((prevRows) => prevRows.map((row) => (row.id === selectedRow ? { ...row, name: player.name } : row)))
+    setIsModalOpen(false)
   }
+
+  const handleClearTable = () => {
+    setRows([]) // Reset rows to an empty array
+    sessionStorage.removeItem('rows') // Clear rows from session storage
+    setRowCounter(1) // Reset the row counter if necessary
+  }
+
+  //Save rows in session storage
+  useEffect(() => {
+    sessionStorage.setItem(gameId.toString(), JSON.stringify(rows))
+  }, [rows])
+
+  // Load rows from session storage on mount
+  useEffect(() => {
+    const savedRows = sessionStorage.getItem(gameId.toString())
+    if (savedRows) {
+      setRows(JSON.parse(savedRows))
+    }
+  }, [])
 
   const columns: GridColDef[] = [
     {
@@ -186,7 +198,7 @@ const ResultsTable = ({ isGameStarted, hasStoppedGame, stoppedGamePoints }: Rest
         return (
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <span style={{ marginRight: '8px' }}>{params.value}</span>
-            <EditIcon
+            <PersonAdd
               sx={{
                 fontSize: '1.2rem',
                 cursor: 'pointer',
@@ -250,58 +262,78 @@ const ResultsTable = ({ isGameStarted, hasStoppedGame, stoppedGamePoints }: Rest
         width: '100%',
         maxWidth: '1200px',
         marginX: 'auto',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)', // Add a subtle shadow
-        borderRadius: '6px', // Round corners
-        overflow: 'hidden', // Prevent overflow due to rounded corners
-        backgroundColor: '#f9f9f9', // Light background for contrast
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+        borderRadius: '6px',
+        overflow: 'hidden',
+        backgroundColor: '#f9f9f9',
       }}
     >
       {rows.length ? (
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { pageSize: 10, page: 0 },
-            },
-          }}
-          pageSizeOptions={[10]}
-          sx={{
-            minWidth: '400px',
-            //   border: 'none', // Remove default border
-            '& .MuiDataGrid-columnHeaders': {
-              backgroundColor: '#1976d2', // Blue header background
-              color: '#000000', // White header text
-              fontSize: '1rem',
-              fontWeight: 'bold',
-            },
-            '& .MuiDataGrid-cell': {
-              borderBottom: '1px solid #e0e0e0', // Light border between rows
-              fontSize: '0.9rem',
-            },
-            '& .MuiDataGrid-row:hover': {
-              backgroundColor: '#f0f0f0', // Light gray on hover
-            },
-            '& .MuiDataGrid-footerContainer': {
-              backgroundColor: '#f1f1f1', // Footer background
-              borderTop: '1px solid #e0e0e0',
-            },
-            '& .MuiDataGrid-selectedRowCount': {
-              display: 'none',
-            },
-            '& .MuiDataGrid-pagination': {
-              justifyContent: 'flex-end', // Align pagination to the right
-              paddingRight: '1rem',
-            },
-            '& .MuiDataGrid-sortIcon': {
-              opacity: 'inherit !important',
-            },
-            '& .MuiDataGrid-columnSeparator--resizable': {
-              display: 'none',
-              backgroundColor: 'blue',
-            },
-          }}
-        />
+        <>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 10, page: 0 },
+              },
+            }}
+            processRowUpdate={(newRow, oldRow) => {
+              setRows((oldRows) => oldRows.map((row) => (row.id === newRow.id ? { ...row, ...newRow } : row)))
+              return newRow
+            }}
+            pageSizeOptions={[10]}
+            sx={{
+              minWidth: '400px',
+              //   border: 'none', // Remove default border
+              '& .MuiDataGrid-columnHeaders': {
+                backgroundColor: '#1976d2', // Blue header background
+                color: '#000000', // White header text
+                fontSize: '1rem',
+                fontWeight: 'bold',
+              },
+              '& .MuiDataGrid-cell': {
+                borderBottom: '1px solid #e0e0e0', // Light border between rows
+                fontSize: '0.9rem',
+              },
+              '& .MuiDataGrid-row:hover': {
+                backgroundColor: '#f0f0f0', // Light gray on hover
+              },
+              '& .MuiDataGrid-footerContainer': {
+                backgroundColor: '#f1f1f1', // Footer background
+                borderTop: '1px solid #e0e0e0',
+              },
+              '& .MuiDataGrid-selectedRowCount': {
+                display: 'none',
+              },
+              '& .MuiDataGrid-pagination': {
+                justifyContent: 'flex-end', // Align pagination to the right
+                paddingRight: '1rem',
+              },
+              '& .MuiDataGrid-sortIcon': {
+                opacity: 'inherit !important',
+              },
+              '& .MuiDataGrid-columnSeparator--resizable': {
+                display: 'none',
+                backgroundColor: 'blue',
+              },
+            }}
+          />
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', margin: '0.5rem' }}>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleClearTable}
+              sx={{
+                backgroundColor: '#ec8c8c',
+                '&:hover': { backgroundColor: '#b71c1c' },
+                textTransform: 'none',
+              }}
+            >
+              Rensa
+            </Button>
+          </Box>
+        </>
       ) : null}
       <PlayerSelectModal isOpen={isModalOpen} onClose={handleCloseModal} players={players} onSelectPlayer={handleSelectPlayer} />
     </Box>
@@ -367,12 +399,7 @@ const PlayerSelectModal = ({ isOpen, onClose, players, onSelectPlayer }: PlayerS
           sx={{
             minWidth: '400px',
             //   border: 'none', // Remove default border
-            '& .MuiDataGrid-columnHeaders': {
-              backgroundColor: '#1976d2', // Blue header background
-              color: '#000000', // White header text
-              fontSize: '1rem',
-              fontWeight: 'bold',
-            },
+
             '& .MuiDataGrid-cell': {
               borderBottom: '1px solid #e0e0e0', // Light border between rows
               fontSize: '0.9rem',
@@ -382,8 +409,6 @@ const PlayerSelectModal = ({ isOpen, onClose, players, onSelectPlayer }: PlayerS
             },
             '& .MuiDataGrid-footerContainer': {
               display: 'none',
-              //   backgroundColor: '#f1f1f1', // Footer background
-              //   borderTop: '1px solid #e0e0e0',
             },
             '& .MuiDataGrid-selectedRowCount': {
               display: 'none',

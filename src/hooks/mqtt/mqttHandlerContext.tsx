@@ -76,30 +76,25 @@ export const MqttHandlerProvider = ({ children }: { children: ReactNode }) => {
           // If passpro is on or off
           if (message.destinationName.includes(MQTT.TOPICS.STATUS)) {
             if (message.payloadString === 'ONLINE') {
-              console.log('PASSPRO IS ONLINE ')
               setConnectedDevice(true)
             }
             if (message.payloadString === 'OFFLINE') {
-              console.log('PASSPRO IS OFFLINE')
               setConnectedDevice(false)
             }
           }
 
           // Total game point for current finished
           if (message.destinationName.includes(MQTT.TOPICS.TOTAL_GAME_SCORE)) {
-            console.log('Total game score ', message.payloadString)
             setTotalGameScore(parseInt(message.payloadString))
           }
 
           // Game started from passpro
           if (message.destinationName.includes(MQTT.TOPICS.STARTED_GAME)) {
-            console.log('Started Game ', message.payloadString)
             setSelectedGame({ id: message.payloadString, isStarted: true })
           }
           // Game stopped from passpro. Includes game-id and total points
           if (message.destinationName.includes(MQTT.TOPICS.STOPPED_GAME)) {
             const payload = JSON.parse(message.payloadString)
-            console.log('Stopped Game ', payload)
             setStoppedGame(payload)
             setSelectedGame({ id: payload.id, isStarted: false })
           }
