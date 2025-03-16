@@ -9,7 +9,7 @@ import GamesDetailsPage from './pages/games/GamesDetailsPage'
 import { theme } from './utils/theme'
 import Settings from './pages/settings/Settings'
 import Statistics from './pages/statistics/Statistics'
-import HomeOverview from './pages/home/Home'
+import HomeOverview from './pages/home/HomeOverview'
 
 const AppContent = () => {
   return (
