@@ -9,8 +9,13 @@ interface ConnectedDeviceContextProps {
   setSelectedGame: any
   stoppedGame: StoppedGameProps | null
   setStoppedGame: any
+  currentPoint: CurrentPointProps | null
+  setCurrentPoint: any
 }
-
+interface CurrentPointProps {
+  id: number
+  point: number
+}
 export interface StoppedGameProps {
   messageUpdateCounter: number
   payload: StoppedGamePayload
@@ -33,8 +38,8 @@ export const ConnectedDeviceProvider = ({ children }: { children: ReactNode }) =
   const [totalGameScore, setTotalGameScore] = useState<number>(0)
   const [selectedGame, setSelectedGame] = useState<SelectedGameProps | null>(null)
   const [stoppedGame, setStoppedGame] = useState<StoppedGameProps | null>(null)
+  const [currentPoint, setCurrentPoint] = useState<CurrentPointProps | null>(null)
 
-  console.log('stopped 2 ', stoppedGame)
   return (
     <ConnectedDeviceContext.Provider
       value={{
@@ -46,6 +51,8 @@ export const ConnectedDeviceProvider = ({ children }: { children: ReactNode }) =
         setSelectedGame: setSelectedGame,
         stoppedGame: stoppedGame,
         setStoppedGame: setStoppedGame,
+        currentPoint: currentPoint,
+        setCurrentPoint: setCurrentPoint,
       }}
     >
       {children}
@@ -117,4 +124,20 @@ export const useSetStoppedGame = () => {
     throw new Error('hook not used correct in context')
   }
   return context.setStoppedGame
+}
+
+export const useCurrentPoint = () => {
+  const context = useContext(ConnectedDeviceContext)
+  if (!context) {
+    throw new Error('hook not used correct in context')
+  }
+  return context.currentPoint
+}
+
+export const useSetCurrentPoint = () => {
+  const context = useContext(ConnectedDeviceContext)
+  if (!context) {
+    throw new Error('hook not used correct in context')
+  }
+  return context.setCurrentPoint
 }

@@ -14,4 +14,6 @@ export interface IGame {
   icon: any
   id: number
   timer?: number
+  shouldShowResultsTable?: boolean
+  shouldShowInstansPoints?: boolean
 }
