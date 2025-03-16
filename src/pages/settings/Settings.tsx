@@ -26,6 +26,7 @@ const Settings = () => {
   const handleTeamChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     const teamName = event.target.value as string
     setSelectedTeam(teamName)
+    //@ts-ignore
     setPlayers(teamsData[teamName])
   }
 
@@ -57,6 +58,7 @@ const Settings = () => {
         {/* Team Dropdown */}
         <FormControl fullWidth sx={{ marginBottom: '2rem' }}>
           <InputLabel>Choose Team</InputLabel>
+          {/* @ts-ignore */}
           <Select value={selectedTeam} onChange={handleTeamChange}>
             {Object.keys(teamsData).map((team) => (
               <MenuItem key={team} value={team}>
@@ -72,7 +74,7 @@ const Settings = () => {
             {selectedTeam}
           </Typography>
           <List>
-            {players.map((player, index) => (
+            {players.map((player: any, index: number) => (
               <ListItem key={index} sx={{ padding: '1rem 0' }}>
                 <ListItemText primary={`${player.name} (#${player.shirtNumber})`} secondary={`Age: ${player.age}, Foot: ${player.foot}`} />
               </ListItem>

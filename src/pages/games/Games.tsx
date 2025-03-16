@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from '@mui/material'
+import { Box, Container } from '@mui/material'
 import { ICardItem } from '../../utils/types'
 import { useIsMobile } from '../../hooks/useIsMobile'
 import { gameOverviewItems } from '../../utils/data'

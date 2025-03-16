@@ -19,8 +19,8 @@ const DeviceStatus = ({ isDeviceConnected }: { isDeviceConnected: boolean }) => 
           '&::before': {
             content: '""',
             position: 'absolute',
-            top: 0,
-            left: 0,
+            top: -2,
+            left: -2,
             width: isDeviceConnected ? '16px' : 0,
             height: isDeviceConnected ? '16px' : 0,
             backgroundColor: 'green',

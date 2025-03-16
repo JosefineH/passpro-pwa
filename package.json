@@ -1,10 +1,13 @@
 {
+  "homepage": "https://josefineh.github.io/passpro-pwa",
   "name": "passpro-pwa",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -17,6 +20,7 @@
     "@mui/x-data-grid": "^7.27.0",
     "country-flag-icons": "^1.5.18",
     "date-fns": "^4.1.0",
+    "gh-pages": "^6.3.0",
     "paho-mqtt": "^1.1.0",
     "react": "^19.0.0",
     "react-country-flag": "^3.1.0",

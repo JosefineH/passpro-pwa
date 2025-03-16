@@ -1,10 +1,10 @@
+//@ts-ignore
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { gameOverviewItems, PlayerProps, players } from '../../utils/data'
 import { Box, Button, Modal, Typography } from '@mui/material'
 import { usePublishMessage } from '../../hooks/mqtt/mqttHandlerContext'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
-import EditIcon from '@mui/icons-material/Edit'
 
 import { MQTT } from '../../utils/api'
 import { useSelectedGame, useStoppedGame } from '../../contexts/connectedDeviceContext'
@@ -14,22 +14,24 @@ import { format } from 'date-fns'
 
 const GameDetailsPage = () => {
   const { id } = useParams<{ id: string }>()
-  const game = gameOverviewItems.find((item) => item.id === Number(id))
+  const publishMessage = usePublishMessage()
+  const selectedGame = useSelectedGame()
+  const stoppedGame = useStoppedGame()
 
+  const game = gameOverviewItems.find((item) => item.id === Number(id))
   if (!game) {
     return <div>Game not found!</div>
   }
 
-  const publishMessage = usePublishMessage()
   const [counter, setCounter] = useState(game.timer)
-  const selectedGame = useSelectedGame()
-  const isGameStarted = selectedGame && selectedGame.isStarted && selectedGame.id === id
 
-  const stoppedGame = useStoppedGame()
-  const stoppedGameId = stoppedGame?.id ?? null
-  const stoppedGamePoints = stoppedGame?.points ?? null
-  console.log('STOPPED GAME ', stoppedGame)
-  const hasStoppedGame = selectedGame && stoppedGameId === id
+  const isGameStarted = selectedGame && selectedGame.isStarted && selectedGame.id === id
+  const stoppedGameId = stoppedGame?.payload?.id ?? null
+  const stoppedGamePoints = stoppedGame?.payload?.points ?? null
+  const hasStoppedGame = selectedGame && stoppedGameId === game.id.toString()
+  const messageUpdateCounter = stoppedGame?.messageUpdateCounter
+
+  //Todo: Will this work? The same game is selected on the Passpro - will it then reset?
   const handleRestartClick = () => {
     publishMessage({ topic: MQTT.TOPICS.SELECT_GAME, message: game.id.toString() })
   }
@@ -102,7 +104,7 @@ const GameDetailsPage = () => {
             paddingX: { xs: '1rem', sm: '2rem', md: '3rem' },
           }}
         >
-          <ResultsTable isGameStarted={isGameStarted} hasStoppedGame={hasStoppedGame} stoppedGamePoints={stoppedGamePoints} gameId={game.id} />
+          <ResultsTable isGameStarted={isGameStarted} hasStoppedGame={hasStoppedGame} stoppedGamePoints={stoppedGamePoints} gameId={game.id} messageUpdateCounter={messageUpdateCounter} />
         </Box>
       </Box>
     </Box>
@@ -114,6 +116,7 @@ interface RestultTableProps {
   hasStoppedGame: boolean | null
   stoppedGamePoints: number | null
   gameId: number
+  messageUpdateCounter?: number
 }
 
 type Row = {
@@ -124,7 +127,7 @@ type Row = {
   date: Date
 }
 
-const ResultsTable = ({ isGameStarted, hasStoppedGame, stoppedGamePoints, gameId }: RestultTableProps) => {
+const ResultsTable = ({ hasStoppedGame, stoppedGamePoints, gameId, messageUpdateCounter }: RestultTableProps) => {
   console.log('hasStoppedGame ', hasStoppedGame)
   const initialState = sessionStorage.getItem(gameId.toString())
   const [rows, setRows] = useState<Row[]>(initialState ? JSON.parse(initialState) : [])
@@ -150,10 +153,9 @@ const ResultsTable = ({ isGameStarted, hasStoppedGame, stoppedGamePoints, gameId
 
   useEffect(() => {
     if (hasStoppedGame && stoppedGamePoints) {
-      console.log('stoppedGamePoints ', stoppedGamePoints)
       handleAddRow(stoppedGamePoints)
     }
-  }, [hasStoppedGame, stoppedGamePoints])
+  }, [hasStoppedGame, stoppedGamePoints, messageUpdateCounter])
 
   const handleEditClick = (row: Row) => {
     setSelectedRow(row.id)
@@ -278,6 +280,7 @@ const ResultsTable = ({ isGameStarted, hasStoppedGame, stoppedGamePoints, gameId
                 paginationModel: { pageSize: 10, page: 0 },
               },
             }}
+            //@ts-ignore
             processRowUpdate={(newRow, oldRow) => {
               setRows((oldRows) => oldRows.map((row) => (row.id === newRow.id ? { ...row, ...newRow } : row)))
               return newRow

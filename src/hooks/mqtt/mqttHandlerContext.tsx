@@ -21,6 +21,8 @@ const generateRandomClientId = () => {
 export const MqttHandlerProvider = ({ children }: { children: ReactNode }) => {
   const [mqttClient, setMqttClient] = useState<Client | undefined>(undefined)
   const [mqttIsConnected, setMqttIsConnected] = useState<boolean>(false)
+  //@ts-ignore
+  const [messageUpdateCounter, setMessageUpdateCounter] = useState(0) // Used to give every MQTT message an ID so that same score can be reqistred on GameDetailPage
   const setConnectedDevice = useSetConnectedDevice()
   const setTotalGameScore = useSetTotalGameScore()
   const setSelectedGame = useSetSelectedGame()
@@ -95,7 +97,11 @@ export const MqttHandlerProvider = ({ children }: { children: ReactNode }) => {
           // Game stopped from passpro. Includes game-id and total points
           if (message.destinationName.includes(MQTT.TOPICS.STOPPED_GAME)) {
             const payload = JSON.parse(message.payloadString)
-            setStoppedGame(payload)
+            setMessageUpdateCounter((prev) => {
+              const newCounter = prev + 1
+              setStoppedGame({ payload, messageUpdateCounter: newCounter })
+              return newCounter
+            })
             setSelectedGame({ id: payload.id, isStarted: false })
           }
         }

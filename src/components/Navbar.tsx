@@ -1,5 +1,4 @@
-import { AppBar, Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select, Toolbar, Typography } from '@mui/material'
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
+import { AppBar, Box, FormControl, IconButton, MenuItem, Select, Toolbar } from '@mui/material'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
 import { Link, useNavigate } from 'react-router-dom'
 import { ROUTES } from '../utils/api'

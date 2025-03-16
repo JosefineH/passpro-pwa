@@ -11,7 +11,12 @@ interface ConnectedDeviceContextProps {
   setStoppedGame: any
 }
 
-interface StoppedGameProps {
+export interface StoppedGameProps {
+  messageUpdateCounter: number
+  payload: StoppedGamePayload
+}
+
+interface StoppedGamePayload {
   id: string | null
   points: number | null
 }
@@ -29,7 +34,7 @@ export const ConnectedDeviceProvider = ({ children }: { children: ReactNode }) =
   const [selectedGame, setSelectedGame] = useState<SelectedGameProps | null>(null)
   const [stoppedGame, setStoppedGame] = useState<StoppedGameProps | null>(null)
 
-  console.log('CONECTED DEVICE SELECTED GAME ', selectedGame)
+  console.log('stopped 2 ', stoppedGame)
   return (
     <ConnectedDeviceContext.Provider
       value={{
