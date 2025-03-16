@@ -47,7 +47,7 @@ const DeviceStatus = ({ isDeviceConnected }: { isDeviceConnected: boolean }) => 
   )
 }
 
-const Home = () => {
+const HomeOverview = () => {
   const isDeviceConnected = useConnectedDevice()
   const isMobile = useIsMobile()
 
@@ -95,4 +95,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default HomeOverview
