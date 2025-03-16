@@ -2,12 +2,14 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler", // This enables support for TypeScript extension imports
+    "allowImportingTsExtensions": true,
     "jsx": "react-jsx", // For React 17+ and later
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true // You need this option for allowImportingTsExtensions to work
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

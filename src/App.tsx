@@ -1,5 +1,5 @@
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom'
-// import Home from './pages/home/Home'
+import Home from './pages/home/Home.tsx'
 import GameOverview from './pages/games/Games'
 import { MqttHandlerProvider } from './hooks/mqtt/mqttHandlerContext'
 import { ConnectedDeviceProvider } from './contexts/connectedDeviceContext'
@@ -18,7 +18,7 @@ const AppContent = () => {
         <Box sx={{ display: 'display', textAlign: 'center' }}>
           <Navbar />
           <Routes>
-            {/* <Route path={ROUTES.HOME} element={<Home />} /> */}
+            <Route path={ROUTES.HOME} element={<Home />} />
             <Route path={ROUTES.GAMES} element={<GameOverview />} />
             <Route path={ROUTES.GAMES_DETAIL_PAGE} element={<GamesDetailsPage />} />
             <Route path={ROUTES.SETTINGS} element={<Settings />} />
