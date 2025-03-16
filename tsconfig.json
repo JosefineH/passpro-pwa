@@ -1,9 +1,14 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
-    "paths": {
-      "@pages/*": ["pages/*"]
-    }
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "react-jsx", // For React 17+ and later
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }
