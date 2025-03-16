@@ -69,6 +69,7 @@ export const MqttHandlerProvider = ({ children }: { children: ReactNode }) => {
         mqttClient.subscribe(MQTT.TOPICS.TOTAL_GAME_SCORE)
         mqttClient.subscribe(MQTT.TOPICS.STARTED_GAME)
         mqttClient.subscribe(MQTT.TOPICS.STOPPED_GAME)
+        mqttClient.subscribe(MQTT.TOPICS.CURRENT_POINT)
       }
 
       // Handle incoming messages. TODO: Move to seperate function for readability
