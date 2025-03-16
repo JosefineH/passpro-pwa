@@ -7,7 +7,7 @@ export const MQTT = {
     TOTAL_GAME_SCORE: CONNECTED_DEVICE_ID + '/totalScore',
     STARTED_GAME: CONNECTED_DEVICE_ID + '/startedGame',
     STOPPED_GAME: CONNECTED_DEVICE_ID + '/stoppedGame',
-    CURRENT_POINT: CONNECTED_DEVICE_ID + '/currentPoint',
+    CURRENT_POINTS: CONNECTED_DEVICE_ID + '/currentPoints',
   },
 }
 

@@ -57,6 +57,7 @@ export const gameOverviewItems: IGame[] = [
     icon: <TimerOutlinedIcon fontSize="large" />,
     id: 2,
     timer: 30,
+    timerDirection: 'DOWN',
     shouldShowInstansPoints: true,
     shouldShowResultsTable: true,
   },
@@ -67,6 +68,8 @@ export const gameOverviewItems: IGame[] = [
     description: 'Passpro kommer att lysa upp 5 stycken gånger. Träffa de på så kort tid som möjligt!',
     icon: <AdjustOutlinedIcon fontSize="large" />,
     id: 3,
+    timer: 0,
+    timerDirection: 'UP',
     shouldShowResultsTable: true,
   },
   {
@@ -86,6 +89,7 @@ export const gameOverviewItems: IGame[] = [
     icon: <KeyboardDoubleArrowRightOutlinedIcon fontSize="large" />,
     id: 5,
     shouldShowResultsTable: true,
+    shouldShowInstansPoints: true,
   },
   {
     title: 'Train',

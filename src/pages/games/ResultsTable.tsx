@@ -5,6 +5,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import { Delete, PersonAdd } from '@mui/icons-material'
+import { useIsMobile } from '../../hooks/useIsMobile'
 
 interface RestultTableProps {
   isGameStarted: boolean | null
@@ -23,6 +24,7 @@ type Row = {
 }
 
 const ResultsTable = ({ hasStoppedGame, stoppedGamePoints, gameId, messageUpdateCounter }: RestultTableProps) => {
+  const isMobile = useIsMobile()
   const initialState = sessionStorage.getItem(gameId.toString())
   const [rows, setRows] = useState<Row[]>(initialState ? JSON.parse(initialState) : [])
   const [rowCounter, setRowCounter] = useState(1)
@@ -156,7 +158,7 @@ const ResultsTable = ({ hasStoppedGame, stoppedGamePoints, gameId, messageUpdate
       sx={{
         marginTop: '1rem',
         width: '100%',
-        maxWidth: '1200px',
+        maxWidth: isMobile ? '100vw' : '1200px',
         marginX: 'auto',
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
         borderRadius: '6px',

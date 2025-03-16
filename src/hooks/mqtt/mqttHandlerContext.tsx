@@ -69,7 +69,7 @@ export const MqttHandlerProvider = ({ children }: { children: ReactNode }) => {
         mqttClient.subscribe(MQTT.TOPICS.TOTAL_GAME_SCORE)
         mqttClient.subscribe(MQTT.TOPICS.STARTED_GAME)
         mqttClient.subscribe(MQTT.TOPICS.STOPPED_GAME)
-        mqttClient.subscribe(MQTT.TOPICS.CURRENT_POINT)
+        mqttClient.subscribe(MQTT.TOPICS.CURRENT_POINTS)
       }
 
       // Handle incoming messages. TODO: Move to seperate function for readability
@@ -102,8 +102,9 @@ export const MqttHandlerProvider = ({ children }: { children: ReactNode }) => {
             setSelectedGame({ id: payload.id, isStarted: false })
           }
           // Current point scored on an ongoing game
-          if (message.destinationName.includes(MQTT.TOPICS.CURRENT_POINT)) {
+          if (message.destinationName.includes(MQTT.TOPICS.CURRENT_POINTS)) {
             const payload = JSON.parse(message.payloadString)
+            console.log('PAYLOAD ', payload)
             setCurrentPoint(payload)
           }
         }
