@@ -1,5 +1,5 @@
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom'
-import Home from './pages/home/Home.tsx'
+import Home from './pages/home/Home'
 import GameOverview from './pages/games/Games'
 import { MqttHandlerProvider } from './hooks/mqtt/mqttHandlerContext'
 import { ConnectedDeviceProvider } from './contexts/connectedDeviceContext'
