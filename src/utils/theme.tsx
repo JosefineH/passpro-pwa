@@ -4,8 +4,8 @@ export const theme = createTheme({
   typography: {
     h1: {
       fontSize: '2.5rem',
-      fontWeight: 500,
-      color: '#000000',
+      fontWeight: 700,
+      color: '#2c3e50',
       lineHeight: 1.2,
     },
     h2: {

@@ -15,7 +15,6 @@ const GameOverview = () => {
         alignItems: 'center',
         justifyContent: 'center',
         height: '100%',
-        backgroundColor: '#e0eadf',
         padding: '2rem',
       }}
     >

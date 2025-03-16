@@ -46,6 +46,8 @@ export const gameOverviewItems: IGame[] = [
     description: 'Samla så mycket poäng du kan utan tidsgräns!',
     icon: <AddIcon fontSize="large" />,
     id: 1,
+    shouldShowInstansPoints: true,
+    shouldShowResultsTable: false,
   },
   {
     title: '30s challenge',
@@ -55,6 +57,9 @@ export const gameOverviewItems: IGame[] = [
     icon: <TimerOutlinedIcon fontSize="large" />,
     id: 2,
     timer: 30,
+    timerDirection: 'DOWN',
+    shouldShowInstansPoints: true,
+    shouldShowResultsTable: true,
   },
   {
     title: 'Shootout',
@@ -63,6 +68,9 @@ export const gameOverviewItems: IGame[] = [
     description: 'Passpro kommer att lysa upp 5 stycken gånger. Träffa de på så kort tid som möjligt!',
     icon: <AdjustOutlinedIcon fontSize="large" />,
     id: 3,
+    timer: 0,
+    timerDirection: 'UP',
+    shouldShowResultsTable: true,
   },
   {
     title: '10 random',
@@ -71,6 +79,7 @@ export const gameOverviewItems: IGame[] = [
     description: 'Träffa det markerade fältet',
     icon: <ShuffleOutlinedIcon fontSize="large" />,
     id: 4,
+    shouldShowResultsTable: true,
   },
   {
     title: 'Dart 31',
@@ -79,6 +88,8 @@ export const gameOverviewItems: IGame[] = [
     description: 'Få exakt 31 poäng',
     icon: <KeyboardDoubleArrowRightOutlinedIcon fontSize="large" />,
     id: 5,
+    shouldShowResultsTable: true,
+    shouldShowInstansPoints: true,
   },
   {
     title: 'Train',
@@ -87,6 +98,8 @@ export const gameOverviewItems: IGame[] = [
     description: 'Ingen tid och ingen räkning',
     icon: <SportsSoccerOutlinedIcon fontSize="large" />,
     id: 6,
+    shouldShowResultsTable: false,
+    shouldShowInstansPoints: true,
   },
   {
     title: 'Timing',
@@ -95,6 +108,7 @@ export const gameOverviewItems: IGame[] = [
     description: 'Träffa ytan som är i rörelse tre gånger',
     icon: <SpeedOutlinedIcon fontSize="large" />,
     id: 7,
+    shouldShowResultsTable: true,
   },
 ]
 

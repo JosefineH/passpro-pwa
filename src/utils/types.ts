@@ -14,4 +14,7 @@ export interface IGame {
   icon: any
   id: number
   timer?: number
+  timerDirection?: 'UP' | 'DOWN'
+  shouldShowResultsTable?: boolean
+  shouldShowInstansPoints?: boolean
 }

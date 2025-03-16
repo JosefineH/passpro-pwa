@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
 import { Client } from 'paho-mqtt'
-import { useSetTotalGameScore, useSetConnectedDevice, useSetSelectedGame, useSetStoppedGame } from '../../contexts/connectedDeviceContext'
+import { useSetTotalGameScore, useSetConnectedDevice, useSetSelectedGame, useSetStoppedGame, useSetCurrentPoint } from '../../contexts/connectedDeviceContext'
 import { MQTT } from '../../utils/api'
 
 interface MqttHandlerContextProps {
@@ -27,6 +27,7 @@ export const MqttHandlerProvider = ({ children }: { children: ReactNode }) => {
   const setTotalGameScore = useSetTotalGameScore()
   const setSelectedGame = useSetSelectedGame()
   const setStoppedGame = useSetStoppedGame()
+  const setCurrentPoint = useSetCurrentPoint()
 
   const options = {
     host: '93c23a0e8db6445f86be5111affa33b4.s1.eu.hivemq.cloud',
@@ -68,6 +69,7 @@ export const MqttHandlerProvider = ({ children }: { children: ReactNode }) => {
         mqttClient.subscribe(MQTT.TOPICS.TOTAL_GAME_SCORE)
         mqttClient.subscribe(MQTT.TOPICS.STARTED_GAME)
         mqttClient.subscribe(MQTT.TOPICS.STOPPED_GAME)
+        mqttClient.subscribe(MQTT.TOPICS.CURRENT_POINTS)
       }
 
       // Handle incoming messages. TODO: Move to seperate function for readability
@@ -85,11 +87,6 @@ export const MqttHandlerProvider = ({ children }: { children: ReactNode }) => {
             }
           }
 
-          // Total game point for current finished
-          if (message.destinationName.includes(MQTT.TOPICS.TOTAL_GAME_SCORE)) {
-            setTotalGameScore(parseInt(message.payloadString))
-          }
-
           // Game started from passpro
           if (message.destinationName.includes(MQTT.TOPICS.STARTED_GAME)) {
             setSelectedGame({ id: message.payloadString, isStarted: true })
@@ -103,6 +100,12 @@ export const MqttHandlerProvider = ({ children }: { children: ReactNode }) => {
               return newCounter
             })
             setSelectedGame({ id: payload.id, isStarted: false })
+          }
+          // Current point scored on an ongoing game
+          if (message.destinationName.includes(MQTT.TOPICS.CURRENT_POINTS)) {
+            const payload = JSON.parse(message.payloadString)
+            console.log('PAYLOAD ', payload)
+            setCurrentPoint(payload)
           }
         }
       }
